@@ -95,8 +95,9 @@ export default function ProductCard({ product }: { product: Product }) {
               'ناموجود'
             ) : inCart > 0 ? (
               <>
-                <Check size={16} strokeWidth={2.5} aria-hidden="true" />
-                در سبد ({toFaDigits(inCart)}) — افزودن بیشتر
+                <Check size={16} strokeWidth={2.5} aria-hidden="true" className="shrink-0" />
+                <span className="sm:hidden">در سبد ({toFaDigits(inCart)})</span>
+                <span className="hidden sm:inline">در سبد ({toFaDigits(inCart)}) — افزودن بیشتر</span>
               </>
             ) : (
               <>

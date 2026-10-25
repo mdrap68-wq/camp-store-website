@@ -80,7 +80,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-stage { display: none !important; }
   .anim-cue { animation: none !important; }
 }
 

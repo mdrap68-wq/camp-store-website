@@ -191,15 +191,15 @@ export default function Shop() {
 
         <div className="lg:col-span-9 xl:col-span-10">
           {/* Toolbar */}
-          <div className="flex flex-wrap items-center gap-2">
-            {/* Search */}
+          <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
+            {/* Search — full width on mobile so it isn't squeezed */}
             <form
               onSubmit={(e) => {
                 e.preventDefault();
                 commitSearch(query);
               }}
               role="search"
-              className="relative min-w-0 flex-1"
+              className="relative w-full min-w-0 sm:flex-1"
             >
               <Search size={17} aria-hidden="true" className="pointer-events-none absolute start-3.5 top-1/2 -translate-y-1/2 text-olive" />
               <label htmlFor="shop-search" className="sr-only">جستجو در محصولات</label>
@@ -223,37 +223,39 @@ export default function Shop() {
               )}
             </form>
 
-            {/* Sort */}
-            <div className="relative">
-              <ArrowDownUp size={16} aria-hidden="true" className="pointer-events-none absolute start-3 top-1/2 -translate-y-1/2 text-olive" />
-              <label htmlFor="shop-sort" className="sr-only">مرتب‌سازی</label>
-              <select
-                id="shop-sort"
-                value={sort}
-                onChange={(e) => setSort(e.target.value as SortKey)}
-                className="h-11 appearance-none rounded-xl border border-stone bg-white ps-9 pe-8 text-[0.8rem] font-bold text-charcoal focus:border-forest focus:outline-none"
-              >
-                {SORT_OPTIONS.map((o) => (
-                  <option key={o.value} value={o.value}>
-                    {o.label}
-                  </option>
-                ))}
-              </select>
-              <ChevronDown size={15} aria-hidden="true" className="pointer-events-none absolute end-2.5 top-1/2 -translate-y-1/2 text-olive" />
-            </div>
+            <div className="flex items-center gap-2">
+              {/* Sort */}
+              <div className="relative min-w-0 flex-1 sm:flex-none">
+                <ArrowDownUp size={16} aria-hidden="true" className="pointer-events-none absolute start-3 top-1/2 -translate-y-1/2 text-olive" />
+                <label htmlFor="shop-sort" className="sr-only">مرتب‌سازی</label>
+                <select
+                  id="shop-sort"
+                  value={sort}
+                  onChange={(e) => setSort(e.target.value as SortKey)}
+                  className="h-11 w-full appearance-none rounded-xl border border-stone bg-white ps-9 pe-8 text-[0.8rem] font-bold text-charcoal focus:border-forest focus:outline-none sm:w-auto"
+                >
+                  {SORT_OPTIONS.map((o) => (
+                    <option key={o.value} value={o.value}>
+                      {o.label}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown size={15} aria-hidden="true" className="pointer-events-none absolute end-2.5 top-1/2 -translate-y-1/2 text-olive" />
+              </div>
 
-            {/* Mobile filter toggle */}
-            <button
-              type="button"
-              onClick={() => setFiltersOpen((v) => !v)}
-              aria-expanded={filtersOpen}
-              aria-controls="mobile-filters"
-              className="flex h-11 items-center gap-2 rounded-xl border border-stone bg-white px-4 text-[0.8rem] font-bold text-charcoal transition hover:border-forest lg:hidden"
-            >
-              <SlidersHorizontal size={16} aria-hidden="true" />
-              فیلترها
-              {hasActiveFilters && <span className="size-2 rounded-full bg-ember" aria-hidden="true" />}
-            </button>
+              {/* Mobile filter toggle */}
+              <button
+                type="button"
+                onClick={() => setFiltersOpen((v) => !v)}
+                aria-expanded={filtersOpen}
+                aria-controls="mobile-filters"
+                className="flex h-11 shrink-0 items-center gap-2 rounded-xl border border-stone bg-white px-4 text-[0.8rem] font-bold text-charcoal transition hover:border-forest lg:hidden"
+              >
+                <SlidersHorizontal size={16} aria-hidden="true" />
+                فیلترها
+                {hasActiveFilters && <span className="size-2 rounded-full bg-ember" aria-hidden="true" />}
+              </button>
+            </div>
           </div>
 
           {/* Mobile filter panel */}

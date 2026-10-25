@@ -184,7 +184,7 @@ export default function Footer() {
           <p>
             پرداخت امن از درگاه‌های آنلاین معتبر بانکی انجام می‌شود. این سایت در نسخهٔ نمایشگاهی (دمو) اجرا می‌شود.
           </p>
-          <div className="flex items-center gap-1.5" aria-label="روش‌های پرداخت پشتیبانی‌شده">
+          <div className="flex flex-wrap items-center justify-center gap-1.5" aria-label="روش‌های پرداخت پشتیبانی‌شده">
             {['زرین‌پال', 'درگاه مستقیم بانک', 'پرداخت در محل'].map((m) => (
               <span key={m} className="rounded-md border border-sand/15 px-2.5 py-1 font-bold text-sand/75">
                 {m}

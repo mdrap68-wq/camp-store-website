@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="????">
+  <rect width="64" height="64" rx="14" fill="#233D32"/>
+  <!-- Mountain with inner facet -->
+  <path d="M12 44 L32 10 L52 44 Z" fill="#E9DFC9"/>
+  <path d="M32 10 L40 24 L32 44 Z" fill="#D5C8A8"/>
+  <!-- Ember sun -->
+  <circle cx="48" cy="15" r="5.5" fill="#C87545"/>
+  <!-- A-frame tent -->
+  <path d="M22 48 L32 30 L42 48 Z" fill="#E9DFC9"/>
+  <path d="M32 30 L38 48 H26 Z" fill="#233D32"/>
+  <!-- Ground -->
+  <path d="M14 50 H50" stroke="#C87545" stroke-width="2.5" stroke-linecap="round"/>
+</svg>

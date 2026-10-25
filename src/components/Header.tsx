@@ -133,12 +133,12 @@ export default function Header() {
             )}
           </nav>
 
-          {/* Cart */}
+          {/* Cart — ms-auto pins it to the left edge on mobile (RTL end) */}
           <button
             type="button"
             onClick={openCart}
             aria-label={`سبد خرید، ${toFaDigits(count)} کالا`}
-            className="relative flex h-11 items-center gap-2 rounded-full border border-stone bg-white ps-3 pe-3 sm:ps-4 sm:pe-2 shadow-sm transition hover:border-forest hover:shadow"
+            className="relative ms-auto flex h-11 shrink-0 items-center gap-2 rounded-full border border-stone bg-white ps-3 pe-3 sm:ps-4 sm:pe-2 shadow-sm transition hover:border-forest hover:shadow"
           >
             <ShoppingCart size={19} className="text-forest" aria-hidden="true" />
             <span className="hidden sm:inline text-[0.8rem] font-bold text-charcoal">سبد خرید</span>

@@ -156,41 +156,43 @@ export default function ProductDetail() {
                 </span>
               </div>
 
-              <div className="mt-4 flex flex-wrap items-center gap-3">
-                {/* Qty */}
-                <div className="flex h-12 items-center rounded-xl border border-stone bg-offwhite" role="group" aria-label="تعداد">
+              <div className="mt-4 grid gap-3">
+                <div className="flex items-center gap-3">
+                  {/* Qty */}
+                  <div className="flex h-12 shrink-0 items-center rounded-xl border border-stone bg-offwhite" role="group" aria-label="تعداد">
+                    <button
+                      type="button"
+                      onClick={() => setQty((q) => Math.max(1, q - 1))}
+                      disabled={!product.inStock}
+                      aria-label="کاهش تعداد"
+                      className="grid size-12 place-items-center rounded-s-xl text-forest transition hover:bg-sand/60 disabled:opacity-40"
+                    >
+                      <Minus size={17} />
+                    </button>
+                    <span className="w-10 text-center text-base font-extrabold tabular-nums text-charcoal" aria-live="polite">
+                      {toFaDigits(qty)}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setQty((q) => Math.min(20, q + 1))}
+                      disabled={!product.inStock}
+                      aria-label="افزایش تعداد"
+                      className="grid size-12 place-items-center rounded-e-xl text-forest transition hover:bg-sand/60 disabled:opacity-40"
+                    >
+                      <Plus size={17} />
+                    </button>
+                  </div>
+
                   <button
                     type="button"
-                    onClick={() => setQty((q) => Math.max(1, q - 1))}
                     disabled={!product.inStock}
-                    aria-label="کاهش تعداد"
-                    className="grid size-12 place-items-center rounded-s-xl text-forest transition hover:bg-sand/60 disabled:opacity-40"
+                    onClick={() => addToCart(product.id, qty)}
+                    className="flex h-12 min-w-0 flex-1 items-center justify-center gap-2 rounded-xl bg-forest px-3 text-[0.85rem] font-extrabold text-sand transition hover:bg-pine disabled:cursor-not-allowed disabled:bg-stone disabled:text-olive sm:text-[0.9rem]"
                   >
-                    <Minus size={17} />
-                  </button>
-                  <span className="w-10 text-center text-base font-extrabold tabular-nums text-charcoal" aria-live="polite">
-                    {toFaDigits(qty)}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => setQty((q) => Math.min(20, q + 1))}
-                    disabled={!product.inStock}
-                    aria-label="افزایش تعداد"
-                    className="grid size-12 place-items-center rounded-e-xl text-forest transition hover:bg-sand/60 disabled:opacity-40"
-                  >
-                    <Plus size={17} />
+                    <ShoppingCart size={19} aria-hidden="true" className="shrink-0" />
+                    <span className="truncate">{product.inStock ? 'افزودن به سبد خرید' : 'فعلاً ناموجود است'}</span>
                   </button>
                 </div>
-
-                <button
-                  type="button"
-                  disabled={!product.inStock}
-                  onClick={() => addToCart(product.id, qty)}
-                  className="flex h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-forest text-[0.9rem] font-extrabold text-sand transition hover:bg-pine disabled:cursor-not-allowed disabled:bg-stone disabled:text-olive"
-                >
-                  <ShoppingCart size={19} aria-hidden="true" />
-                  {product.inStock ? 'افزودن به سبد خرید' : 'فعلاً ناموجود است'}
-                </button>
                 <button
                   type="button"
                   disabled={!product.inStock}
@@ -198,7 +200,7 @@ export default function ProductDetail() {
                     addToCart(product.id, qty, { silent: true });
                     navigate('/checkout');
                   }}
-                  className="flex h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-ember text-[0.9rem] font-extrabold text-white transition hover:bg-ember-dark disabled:cursor-not-allowed disabled:bg-stone disabled:text-olive"
+                  className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-ember text-[0.9rem] font-extrabold text-white transition hover:bg-ember-dark disabled:cursor-not-allowed disabled:bg-stone disabled:text-olive"
                 >
                   خرید سریع و پرداخت
                 </button>
@@ -275,9 +277,11 @@ export default function ProductDetail() {
 
       {/* Related products */}
       <section className="mt-12 border-t border-stone pt-10" aria-labelledby="related-title">
-        <div className="flex items-center justify-between gap-4">
-          <h2 id="related-title" className="text-xl font-black text-forest">کالاهای مشابه که سفر شما را کامل می‌کنند</h2>
-          <Link to="/shop" className="flex shrink-0 items-center gap-1 text-[0.8rem] font-extrabold text-forest hover:text-ember">
+        <div className="flex items-end justify-between gap-3">
+          <h2 id="related-title" className="text-lg font-black leading-8 text-forest sm:text-xl">
+            کالاهای مشابه که سفر شما را کامل می‌کنند
+          </h2>
+          <Link to="/shop" className="mb-0.5 flex shrink-0 items-center gap-1 text-[0.8rem] font-extrabold text-forest hover:text-ember">
             دیدن همه
             <ChevronLeft size={15} aria-hidden="true" />
           </Link>

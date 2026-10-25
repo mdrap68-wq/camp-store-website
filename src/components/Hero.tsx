@@ -41,30 +41,44 @@ export default function Hero() {
 
     const mm = gsap.matchMedia();
 
+    // IMPORTANT: include an always-matching mobile query. With only
+    // isDesktop + reduceMotion, on phones neither query matches so this
+    // callback never ran — stage stayed opacity:0 and the product image
+    // never appeared on scroll.
     mm.add(
       {
         isDesktop: '(min-width: 1024px)',
+        isMobile: '(max-width: 1023px)',
         reduceMotion: '(prefers-reduced-motion: reduce)',
       },
       (context) => {
         const { reduceMotion, isDesktop } = context.conditions as {
           reduceMotion: boolean;
           isDesktop: boolean;
+          isMobile: boolean;
         };
 
         if (reduceMotion) {
-          // Accessible static alternative: hide cinematic layer entirely
-          gsap.set([stageRef.current, cueRef.current], { autoAlpha: 0, display: 'none' });
+          // Accessible static alternative: show the product card immediately
+          gsap.set(cueRef.current, { autoAlpha: 0, display: 'none' });
+          gsap.set(stageRef.current, { autoAlpha: 1 });
+          gsap.set(cardRef.current, { y: 0, scale: 1, rotate: 0 });
+          gsap.set(wordRef.current, { autoAlpha: 0.5, scale: 1 });
           return;
         }
+
+        gsap.set(stageRef.current, { autoAlpha: 0 });
+        gsap.set(cardRef.current, { y: isDesktop ? 96 : 56, scale: 0.9, rotate: isDesktop ? -1.6 : 0 });
 
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: section,
             start: 'top top',
-            end: isDesktop ? '+=85%' : '+=42%',
+            // Pin on mobile too — otherwise the section scrolls away before
+            // the product stage fades in, so the image never gets seen.
+            end: isDesktop ? '+=85%' : '+=70%',
             scrub: 0.6,
-            pin: isDesktop,
+            pin: true,
             anticipatePin: 1,
             invalidateOnRefresh: true,
           },
@@ -72,32 +86,31 @@ export default function Hero() {
         });
 
         // 1) Scene breathes and darkens as scroll begins
-        tl.to(sceneRef.current, { scale: 1.13, duration: 1 }, 0);
+        tl.to(sceneRef.current, { scale: isDesktop ? 1.13 : 1.08, duration: 1 }, 0);
         tl.to(dimRef.current, { opacity: 0.66, duration: 0.7 }, 0.12);
 
         // 2) Headline yields — promise of adventure makes way for the gear
-        tl.to(headlineRef.current, { yPercent: -16, autoAlpha: 0, duration: 0.4, ease: 'power2.in' }, 0);
+        tl.to(headlineRef.current, { yPercent: -16, autoAlpha: 0, duration: 0.35, ease: 'power2.in' }, 0);
         tl.to(cueRef.current, { autoAlpha: 0, duration: 0.18 }, 0);
 
-        // 3) Product stage emerges
-        tl.to(stageRef.current, { autoAlpha: 1, duration: 0.3 }, 0.34);
+        // 3) Product stage emerges early enough that mobile users see the card
+        tl.to(stageRef.current, { autoAlpha: 1, duration: 0.28 }, 0.22);
         tl.fromTo(
           wordRef.current,
           { autoAlpha: 0, scale: 0.92 },
-          { autoAlpha: 1, scale: 1, duration: 0.5, ease: 'power2.out' },
-          0.36,
+          { autoAlpha: 1, scale: 1, duration: 0.45, ease: 'power2.out' },
+          0.24,
         );
-        tl.fromTo(
+        tl.to(
           cardRef.current,
-          { y: 96, scale: 0.86, rotate: -1.6 },
-          { y: 0, scale: 1, rotate: 0, duration: 0.6, ease: 'power3.out' },
-          0.4,
+          { y: 0, scale: 1, rotate: 0, duration: 0.55, ease: 'power3.out' },
+          0.26,
         );
         tl.fromTo(
           chipsRef.current?.children ?? [],
           { autoAlpha: 0, y: 26 },
           { autoAlpha: 1, y: 0, stagger: 0.14, duration: 0.34, ease: 'power2.out' },
-          0.58,
+          0.45,
         );
       },
     );
@@ -182,8 +195,7 @@ export default function Hero() {
       {/* ── Layer B: product stage (revealed by scroll) ───── */}
       <div
         ref={stageRef}
-        className="hero-stage pointer-events-none absolute inset-0 flex items-center justify-center"
-        style={{ opacity: 0, visibility: 'hidden' }}
+        className="hero-stage pointer-events-none absolute inset-0 z-[1] flex items-center justify-center pt-[4.5rem] sm:pt-0"
         aria-hidden="false"
       >
         {/* Giant editorial word */}
@@ -192,13 +204,13 @@ export default function Hero() {
           className="pointer-events-none absolute inset-0 flex select-none items-center justify-center"
           aria-hidden="true"
         >
-          <span className="text-[10rem] font-black leading-none text-sand/[0.12] lg:text-[15rem]">
+          <span className="text-[7.5rem] font-black leading-none text-sand/[0.12] sm:text-[10rem] lg:text-[15rem]">
             روکا
           </span>
         </div>
 
         {/* Product card + floating spec chips */}
-        <div className="relative mt-6 w-[min(92vw,400px)] sm:w-[420px]">
+        <div className="relative w-[min(88vw,360px)] sm:mt-6 sm:w-[420px]">
           {/* Floating chips */}
           <div ref={chipsRef} className="pointer-events-none absolute inset-0 z-10 hidden sm:block" aria-hidden="true">
             <span className="absolute -top-4 -start-24 flex items-center gap-1.5 rounded-2xl border border-sand/25 bg-pine/75 px-3 py-2 text-[0.68rem] font-bold text-sand backdrop-blur-md shadow-lg">
@@ -225,7 +237,7 @@ export default function Hero() {
                 src={HERO_PRODUCT.image}
                 alt={HERO_PRODUCT.name}
                 className="aspect-[4/3] w-full object-cover object-center"
-                loading="lazy"
+                fetchPriority="high"
                 width={800}
                 height={600}
               />
